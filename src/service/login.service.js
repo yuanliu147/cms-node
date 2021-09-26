@@ -1,10 +1,10 @@
 const connection = require('../config/db.config')
 
-async function getUserByName(userName) {
+async function getUserByName(name) {
   const sql = `
-    SELECT * FROM users WHERE userName = ?
+    SELECT * FROM users WHERE name = ?
   `
-  const result = await connection.execute(sql, [userName])
+  const result = await connection.execute(sql, [name])
   return result[0]
 }
 

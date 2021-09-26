@@ -1,7 +1,6 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 
-
 const app = new Koa()
 
 const { app_port } = require('./config/env.config')
