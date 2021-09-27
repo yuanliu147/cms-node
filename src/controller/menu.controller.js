@@ -1,4 +1,4 @@
-const { emitEvent } = require('../utils')
+const { emitEvent } = require('../utils/utils')
 const { getMenusById } = require('../service/menu.serevice')
 const { SuccessModel } = require('../model/response.model')
 async function getMenus(ctx) {

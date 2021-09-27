@@ -1,13 +1,16 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 
-const app = new Koa()
-
 const { app_port } = require('./config/env.config')
 const { registerRouters } = require('./config/router.config')
-const { errorToCode } = require('./constants/error-types')
+const authToken = require('./middleware/authToken')
 const { FailModel } = require('./model/response.model')
+
+const app = new Koa()
+
 app.use(bodyParser())
+app.use(authToken)
+
 
 registerRouters(app)
 

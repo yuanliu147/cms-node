@@ -2,9 +2,13 @@ const jwt = require('jsonwebtoken')
 const { secret_key } = require('../config/env.config')
 const { FailModel } = require('../model/response.model')
 const { TOKEN_IS_INVALID } = require('../constants/error-types')
-const { emitEvent } = require('../utils')
+const { emitEvent } = require('../utils/utils')
 
-async function authUser(ctx, next) {
+async function authToken(ctx, next) {
+  if (ctx.path === '/login') {
+    await next()
+    return
+  }
   const headers = ctx.request.headers
   const authorization = headers['authorization']
   if (!authorization) {
@@ -22,6 +26,4 @@ async function authUser(ctx, next) {
   await next()
 }
 
-module.exports = {
-  authUser
-}
+module.exports = authToken

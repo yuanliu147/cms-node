@@ -3,7 +3,7 @@ const { secret_key } = require('../config/env.config')
 const { HTTP_PARAMS_IS_ERROR, USER_OR_PASSWORD_IS_ERROR } = require('../constants/error-types')
 const { getUserByName } = require('../service/login.service')
 const { SuccessModel } = require('../model/response.model')
-const { emitEvent, md5Password } = require('../utils')
+const { emitEvent, md5Password } = require('../utils/utils')
 
 async function verifyLogin(ctx, next) {
   const { name, password } = ctx.request.body
