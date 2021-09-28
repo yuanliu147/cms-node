@@ -11,7 +11,6 @@ const app = new Koa()
 app.use(bodyParser())
 app.use(authToken)
 
-
 registerRouters(app)
 
 app.listen(app_port, () => {

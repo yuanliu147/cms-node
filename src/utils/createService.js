@@ -1,3 +1,14 @@
+function createGetList(page, connection) {
+  return async function (pageSize = 10, pageNum = 1) {
+    const offset = (pageNum - 1) * pageSize
+    const sql = `
+      SELECT * FROM ${page}s LIMIT ${pageSize} OFFSET ${offset}
+    `
+    const result = await connection.execute(sql)
+    return result[0]
+  }
+}
+
 function createGetTotal(page, connection) {
   return async function () {
     const sql = `
@@ -30,6 +41,7 @@ function createDelete(page, connection) {
 }
 
 module.exports = {
+  createGetList,
   createGetTotal,
   createGetAll,
   createDelete

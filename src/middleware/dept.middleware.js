@@ -8,13 +8,13 @@ const verifyDept = async (ctx, next) => {
   const { id } = ctx.params
   const { leader, name } = ctx.request.body
 
-  if(leader === undefined || name === undefined) {
+  if (leader === undefined || name === undefined) {
     emitEvent(ctx, '部门数据字段不能为undefined~')
     return
   }
 
   const users = await getAllUsers()
-  const leaderExists = users.find((item) => (item.name === leader))
+  const leaderExists = users.find((item) => item.name === leader)
   if (!leaderExists) {
     emitEvent(ctx, TARGET_IS_NOT_EXISTS)
     return

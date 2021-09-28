@@ -13,28 +13,45 @@ const {
   getUsersTotal
 } = require('../service/user.service')
 
+const { createNewMenu, updateMenuById, deleteMenuById } = require('../service/menu.serevice')
+const {
+  getRolesFromDB,
+  getRolesTotal,
+  createNewRole,
+  updateRoleById,
+  deleteRoleById
+} = require('../service/role.service')
+
 const { emitEvent } = require('./utils')
 const { SuccessModel, FailModel } = require('../model/response.model')
 
 const deleteOperators = {
   dept: deleteDeptById,
-  user: deleteUserById
+  user: deleteUserById,
+  menu: deleteMenuById,
+  role: deleteRoleById
 }
 const updateOperators = {
   dept: updateDeptById,
-  user: updateUserById
+  user: updateUserById,
+  menu: updateMenuById,
+  role: updateRoleById
 }
 const createOperators = {
   dept: createNewDept,
-  user: createNewUser
+  user: createNewUser,
+  menu: createNewMenu,
+  role: createNewRole
 }
 const listOperators = {
   dept: getDeptsFromDB,
-  user: getUsersFromDB
+  user: getUsersFromDB,
+  role: getRolesFromDB
 }
 const totalOperators = {
   dept: getDeptsTotal,
-  user: getUsersTotal
+  user: getUsersTotal,
+  role: getRolesTotal
 }
 
 function createDeleteController(page) {
@@ -95,12 +112,12 @@ function createCreateController(page) {
 function createGetController(page) {
   return async function (ctx) {
     try {
-      let { pageSize, pageNum } = ctx.query
+      let { pageSize = 10, pageNum = 1 } = ctx.query
       pageSize *= 1
       pageNum *= 1
-      const depts = await listOperators[page](pageSize, pageNum)
+      const list = await listOperators[page](pageSize, pageNum)
       const total = await totalOperators[page]()
-      ctx.body = new SuccessModel({ depts, ...total })
+      ctx.body = new SuccessModel({ list, ...total })
     } catch (error) {
       emitEvent(ctx, error.message)
     }

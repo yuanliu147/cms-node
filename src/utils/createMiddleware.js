@@ -25,7 +25,7 @@ function createToVerifyId(service) {
       return item._id === id
     })
     if (!isExists) {
-      emitEvent(ctx, '部门id不存在~')
+      emitEvent(ctx, 'id不存在~')
       return
     }
     await next()

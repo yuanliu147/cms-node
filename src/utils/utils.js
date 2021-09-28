@@ -11,7 +11,23 @@ function emitEvent(ctx, msg) {
   ctx.app.emit('error', error, ctx)
 }
 
+function flatMenuToTree(menus, _id = null) {
+  const result = []
+  for (let i = 0; i < menus.length; i++) {
+    if (menus[i].parentId === _id) {
+      result.push(menus[i])
+      menus.splice(i, 1)
+      i--
+    }
+  }
+  result.forEach((item) => {
+    item.children = flatMenuToTree(menus, item._id)
+  })
+  return result
+}
+
 module.exports = {
   emitEvent,
-  md5Password
+  md5Password,
+  flatMenuToTree
 }
