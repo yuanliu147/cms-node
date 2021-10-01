@@ -6,7 +6,7 @@ const { emitEvent } = require('../utils/utils')
 const verifyUser = async (ctx, next) => {
   let { id } = ctx.params
   const userInfo = ctx.request.body
-  const infoArr = ['name', 'email', 'cellPhone', 'sex', 'job', 'state', 'roleId', 'deptId']
+  const infoArr = ['name', 'email', 'cellPhone', 'sex', 'state', 'roleId', 'deptId']
   if (ctx.path === '/users') {
     infoArr.push('password')
   }

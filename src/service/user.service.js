@@ -6,13 +6,13 @@ const { createGetTotal, createGetAll, createDelete } = require('../utils/createS
 
 const currPage = 'user'
 
-async function getUsersFromDB(pageSize = 10, pageNum = 1) {
+async function getUsersFromDB(pageSize = 10, pageNum = 1, userId) {
   const offset = (pageNum - 1) * pageSize
   const sql = `
     SELECT _id, name, email, cellPhone, job, state, createTime, updateTime 
-    FROM users LIMIT ${pageSize} OFFSET ${offset}
+    FROM users WHERE _id != ? LIMIT ${pageSize} OFFSET ${offset}
   `
-  const result = await connection.execute(sql)
+  const result = await connection.execute(sql, [userId])
   return result[0]
 }
 
@@ -22,7 +22,7 @@ const getUsersTotal = createGetTotal(currPage, connection)
 
 const deleteUserById = createDelete(currPage, connection)
 
-async function createNewUser({ name, password, email, cellPhone, sex, job, state, roleId, deptId }) {
+async function createNewUser({ name, password, email, cellPhone, sex, state, roleId, deptId }) {
   const sql = `
     INSERT INTO users(name, password, email, cellPhone, sex,  job, state, role_id, dept_id )
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -42,14 +42,31 @@ async function createNewUser({ name, password, email, cellPhone, sex, job, state
   return result[0]
 }
 
-async function updateUserById(_id, { name, email, cellPhone, sex, job, state, roleId, deptId }) {
+async function updateUserById(_id, { name, email, cellPhone, sex, state, roleId, deptId }) {
   const sql = `
     UPDATE users SET 
-    name = ?, email = ?, cellPhone = ?, sex = ?,  job = ?, state = ?, role_id = ?, dept_id = ?
+    name = ?, email = ?, cellPhone = ?, sex = ?, state = ?, role_id = ?, dept_id = ?
     WHERE _id = ?
   `
 
-  const result = await connection.execute(sql, [name, email, cellPhone, sex, job, state, roleId, deptId, _id])
+  const result = await connection.execute(sql, [name, email, cellPhone, sex, state, roleId, deptId, _id])
+  return result[0]
+}
+
+async function setAvatarById(_id, avatar) {
+  const sql = `
+    UPDATE users SET avatar = ? WHERE _id = ?
+  `
+  const result = await connection.execute(sql, [avatar, _id])
+
+  return result[0]
+}
+async function getUserInfoById(_id) {
+  const sql = `
+    SELECT _id, name, email, cellPhone, sex, state, avatar, role_id roleId, dept_id deptId
+    FROM users WHERE _id = ?
+  `
+  const result = await connection.execute(sql, [_id])
   return result[0]
 }
 
@@ -59,5 +76,7 @@ module.exports = {
   getAllUsers,
   createNewUser,
   deleteUserById,
-  updateUserById
+  updateUserById,
+  setAvatarById,
+  getUserInfoById
 }

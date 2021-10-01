@@ -115,7 +115,8 @@ function createGetController(page) {
       let { pageSize = 10, pageNum = 1 } = ctx.query
       pageSize *= 1
       pageNum *= 1
-      const list = await listOperators[page](pageSize, pageNum)
+      const userId = ctx.userId
+      const list = await listOperators[page](pageSize, pageNum, userId)
       const total = await totalOperators[page]()
       ctx.body = new SuccessModel({ list, ...total })
     } catch (error) {

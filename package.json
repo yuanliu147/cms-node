@@ -19,8 +19,10 @@
     "dotenv": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.3",
-    "koa-bodyparser": "^4.3.0",
+    "koa-body": "^4.2.0",
+    "koa-multer": "^1.0.2",
     "koa-router": "^10.1.1",
+    "koa-static": "^5.0.0",
     "mysql2": "^2.3.0"
   }
 }

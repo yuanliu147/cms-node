@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const deptRouter = new Router({ prefix: '/dept' })
+const deptRouter = new Router({ prefix: '/depts' })
 const idToNumber = require('../middleware/idToNumber')
 const { getDepts, createDept, updateDept, deleteDept } = require('../controller/dept.controller')
 const { verifyDept, verifyDeptId } = require('../middleware/dept.middleware')
