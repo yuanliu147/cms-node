@@ -9,7 +9,7 @@ const currPage = 'user'
 async function getUsersFromDB(pageSize = 10, pageNum = 1, userId) {
   const offset = (pageNum - 1) * pageSize
   const sql = `
-    SELECT _id, name, email, cellPhone, job, state, createTime, updateTime 
+    SELECT _id, name, avatar, state, sex, email, cellPhone, role_id roleId, dept_id deptId, createTime, updateTime 
     FROM users WHERE _id != ? LIMIT ${pageSize} OFFSET ${offset}
   `
   const result = await connection.execute(sql, [userId])
