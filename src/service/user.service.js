@@ -22,19 +22,17 @@ const getUsersTotal = createGetTotal(currPage, connection)
 
 const deleteUserById = createDelete(currPage, connection)
 
-async function createNewUser({ name, password, email, cellPhone, sex, state, roleId, deptId }) {
+async function createNewUser({ name, email, cellPhone, sex, state, roleId, deptId }) {
   const sql = `
-    INSERT INTO users(name, password, email, cellPhone, sex,  job, state, role_id, dept_id )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+    INSERT INTO users(name, email, cellPhone, sex, state, role_id, dept_id )
+    VALUES (?, ?, ?, ?, ?, ?, ?);
   `
   // 此处password必须是string,不然会报错
   const result = await connection.execute(sql, [
     name,
-    md5Password(password),
     email,
     cellPhone,
     sex,
-    job,
     state,
     roleId,
     deptId

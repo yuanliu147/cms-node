@@ -7,9 +7,6 @@ const verifyUser = async (ctx, next) => {
   let { id } = ctx.params
   const userInfo = ctx.request.body
   const infoArr = ['name', 'email', 'cellPhone', 'sex', 'state', 'roleId', 'deptId']
-  if (ctx.path === '/users') {
-    infoArr.push('password')
-  }
   for (let item of infoArr) {
     if (userInfo[item] === undefined) {
       emitEvent(ctx, '用户数据字段不能为undefined~')
@@ -25,7 +22,7 @@ const verifyUser = async (ctx, next) => {
       (item.name === userInfo.name || item.email === userInfo.email || item.cellPhone === userInfo.cellPhone)
   )
   if (isExists) {
-    emitEvent(ctx, TARGET_ALREADY_EXISTS)
+    emitEvent(ctx, "用户名, 邮箱或手机号已经存在~")
     return
   }
 

@@ -5,7 +5,7 @@ const { createToVerifyOperator } = require('../utils/createMiddleware')
 const { verifyMenuId, verifyMenu } = require('../middleware/menu.middleware')
 const idToNumber = require('../middleware/idToNumber')
 
-menuRouter.get('/', createToVerifyOperator('search', 'menu'), getMenus)
+menuRouter.get('/', getMenus)
 menuRouter.post('/', createToVerifyOperator('create', 'menu'), verifyMenu, createNewMenu)
 menuRouter.patch('/:id', idToNumber, createToVerifyOperator('update', 'menu'), verifyMenuId, verifyMenu, updateMenu)
 menuRouter.delete('/:id', idToNumber, createToVerifyOperator('update', 'menu'), verifyMenuId, deleteMenu)

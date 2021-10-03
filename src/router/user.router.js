@@ -5,7 +5,7 @@ const { getUsers, createUser, deleteUser, updateUser, getUserInfo } = require('.
 const { verifyUser, verifyUserId } = require('../middleware/user.middleware')
 const { createToVerifyOperator } = require('../utils/createMiddleware')
 
-userRouter.get('/', createToVerifyOperator('search', 'user'), getUsers)
+userRouter.get('/', getUsers)
 userRouter.post('/', createToVerifyOperator('create', 'user'), verifyUser, createUser)
 userRouter.patch('/:id', idToNumber, createToVerifyOperator('update', 'user'), verifyUserId, verifyUser, updateUser)
 userRouter.delete('/:id', idToNumber, createToVerifyOperator('delete', 'user'), verifyUserId, deleteUser)

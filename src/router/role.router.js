@@ -5,7 +5,7 @@ const { getRoles, createRole, updateRole, deleteRole } = require('../controller/
 const { verifyRole, verifyRoleId } = require('../middleware/role.middleware')
 const { createToVerifyOperator } = require('../utils/createMiddleware')
 
-roleRouter.get('/', createToVerifyOperator('search', 'role'), getRoles)
+roleRouter.get('/', getRoles)
 roleRouter.post('/', createToVerifyOperator('create', 'role'), verifyRole, createRole)
 roleRouter.patch('/:id', idToNumber, createToVerifyOperator('update', 'role'), verifyRoleId, verifyRole, updateRole)
 roleRouter.delete('/:id', idToNumber, createToVerifyOperator('delete', 'role'), verifyRoleId, deleteRole)

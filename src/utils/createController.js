@@ -117,8 +117,11 @@ function createGetController(page) {
       pageNum *= 1
       const userId = ctx.userId
       const list = await listOperators[page](pageSize, pageNum, userId)
-      const total = await totalOperators[page]()
-      ctx.body = new SuccessModel({ list, ...total })
+      const totalRes = await totalOperators[page]()
+      if(page === 'user') {
+        totalRes.total--
+      }
+      ctx.body = new SuccessModel({ list, ...totalRes })
     } catch (error) {
       emitEvent(ctx, error.message)
     }

@@ -4,12 +4,13 @@ const { TARGET_IS_NOT_EXISTS, NO_PERMISSION } = require('../constants/error-type
 
 function createToVerifyOperator(permission, page) {
   return async function (ctx, next) {
-    const id = ctx.userId || null
-    const menus = await getMenusById(id)
+    const _id = ctx.userId || null
+    const { id } = ctx.params
+    const menus = await getMenusById(_id)
     const hasAuthority = menus.find((item) => {
       return item.permission === `${permission}:${page}`
     })
-    if (!hasAuthority) {
+    if (!hasAuthority && _id !== id) {
       emitEvent(ctx, NO_PERMISSION)
       return
     }
