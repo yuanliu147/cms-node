@@ -28,10 +28,15 @@ const getUserInfo = async (ctx, next) => {
   }
 }
 
+const searchUsers = async (ctx, next) => {
+  ctx.body = new SuccessModel('搜索成功')
+}
+
 module.exports = {
   getUsers,
   createUser,
   deleteUser,
   updateUser,
-  getUserInfo
+  getUserInfo,
+  searchUsers
 }

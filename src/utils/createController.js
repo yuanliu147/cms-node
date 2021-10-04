@@ -58,9 +58,13 @@ function createDeleteController(page) {
   return async function (ctx) {
     try {
       const { id } = ctx.params
-
+      const userId = ctx.userId
       if (!deleteOperators[page]) {
         throw new Error('页面不存在~')
+      }
+      if(page === 'user' && id === userId) {
+        throw new Error('抱歉，不能删除自己！')
+        return
       }
       const res = await deleteOperators[page](id)
 
@@ -112,11 +116,9 @@ function createCreateController(page) {
 function createGetController(page) {
   return async function (ctx) {
     try {
-      let { pageSize = 10, pageNum = 1 } = ctx.query
-      pageSize *= 1
-      pageNum *= 1
+      const query = ctx.query
       const userId = ctx.userId
-      const list = await listOperators[page](pageSize, pageNum, userId)
+      const list = await listOperators[page](query, userId)
       const totalRes = await totalOperators[page]()
       if(page === 'user') {
         totalRes.total--

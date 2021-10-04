@@ -1,10 +1,24 @@
 function createGetList(page, connection) {
-  return async function (pageSize = 10, pageNum = 1) {
+  return async function (query) {
+    const { pageSize = 10, pageNum = 1 } = query
     const offset = (pageNum - 1) * pageSize
+    const infoArr = []
+    let fields = ['_id', 'name']
+    if (page === 'dept') {
+      fields.push('leader')
+    }
+    let queryStr = 'WHERE 1=1 '
+    for(let i = 0; i < fields.length; i++) {
+      const key = fields[i]
+      if(query[key]) {
+        queryStr += `&& ${key} = ? `
+        infoArr.push(query[key])
+      }
+    }
     const sql = `
-      SELECT * FROM ${page}s LIMIT ${pageSize} OFFSET ${offset}
+      SELECT * FROM ${page}s ${queryStr} LIMIT ${pageSize} OFFSET ${offset}
     `
-    const result = await connection.execute(sql)
+    const result = await connection.execute(sql, infoArr)
     return result[0]
   }
 }
@@ -35,6 +49,7 @@ function createDelete(page, connection) {
     const sql = `
       DELETE FROM ${page}s WHERE _id = ?
     `
+    
     const result = await connection.execute(sql, [_id])
     return result[0]
   }

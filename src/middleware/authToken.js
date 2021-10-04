@@ -20,7 +20,7 @@ async function authToken(ctx, next) {
     const decoded = jwt.verify(token, secret_key)
     ctx.userId = decoded._id
   } catch (err) {
-    emitEvent(ctx, 'token认证失败')
+    emitEvent(ctx, 'token认证失败, 请重新登录~')
     return
   }
   await next()

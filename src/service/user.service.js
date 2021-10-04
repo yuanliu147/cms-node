@@ -6,13 +6,24 @@ const { createGetTotal, createGetAll, createDelete } = require('../utils/createS
 
 const currPage = 'user'
 
-async function getUsersFromDB(pageSize = 10, pageNum = 1, userId) {
-  const offset = (pageNum - 1) * pageSize
+async function getUsersFromDB(query, userId) {
+  const { pageSize = 10, pageNum = 1, _id, name, state, cellPhone, email, deptId } = query
+  const offset = (pageNum * 1 - 1) * (pageSize * 1)
+  const infoArr = []
+  let queryStr = ''
+  const fields = ['_id', 'name', 'state', 'cellPhone', 'email', 'deptId']
+  for (let i = 0; i < fields.length; i++) {
+    const key = fields[i]
+    if (query[key]) {
+      queryStr += `&& ${key}=? `
+      infoArr.push(query[key])
+    }
+  }
   const sql = `
     SELECT _id, name, avatar, state, sex, email, cellPhone, role_id roleId, dept_id deptId, createTime, updateTime 
-    FROM users WHERE _id != ? LIMIT ${pageSize} OFFSET ${offset}
+    FROM users WHERE 1=1 ${queryStr} LIMIT ${pageSize} OFFSET ${offset}
   `
-  const result = await connection.execute(sql, [userId])
+  const result = await connection.execute(sql, infoArr)
   return result[0]
 }
 
@@ -28,15 +39,7 @@ async function createNewUser({ name, email, cellPhone, sex, state, roleId, deptI
     VALUES (?, ?, ?, ?, ?, ?, ?);
   `
   // 此处password必须是string,不然会报错
-  const result = await connection.execute(sql, [
-    name,
-    email,
-    cellPhone,
-    sex,
-    state,
-    roleId,
-    deptId
-  ])
+  const result = await connection.execute(sql, [name, email, cellPhone, sex, state, roleId, deptId])
   return result[0]
 }
 
