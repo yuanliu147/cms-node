@@ -31,7 +31,17 @@ const verifyUser = async (ctx, next) => {
 
 const verifyUserId = createToVerifyId(getAllUsers)
 
+const verifyDelete = async (ctx, next) => {
+  const { id } = ctx.params
+  if(id <= 106 && id >= 101) {
+    emitEvent(ctx, '抱歉，预置用户不能删除~')
+    return
+  }
+  await next()
+}
+
 module.exports = {
   verifyUser,
-  verifyUserId
+  verifyUserId,
+  verifyDelete
 }

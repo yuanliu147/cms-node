@@ -3,7 +3,25 @@ const { createGetList, createGetTotal, createGetAll, createDelete } = require('.
 
 const currPage = 'role'
 
-const getRolesFromDB = createGetList(currPage, connection)
+async function getRolesFromDB(query) {
+  const { pageSize = 10, pageNum = 1 } = query
+  const offset = (pageNum - 1) * pageSize
+
+  const sql = `
+    SELECT r.*, 
+    JSON_ARRAYAGG(
+    JSON_OBJECT('_id', m._id, 'name', m.name, 'parentId', m.parent_id)
+    )  permission
+    FROM roles r
+    LEFT JOIN role_menus rm ON r._id = rm.role_id
+    LEFT JOIN menus m ON rm.menu_id = m._id
+    GROUP BY r._id
+    LIMIT ${pageSize} OFFSET ${offset}
+  `
+  const res = await connection.execute(sql)
+  return res[0]
+}
+
 const getRolesTotal = createGetTotal(currPage, connection)
 const getAllRoles = createGetAll(currPage, connection)
 const deleteRoleById = createDelete(currPage, connection)

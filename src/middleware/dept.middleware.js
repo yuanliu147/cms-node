@@ -31,7 +31,17 @@ const verifyDept = async (ctx, next) => {
 
 const verifyDeptId = createToVerifyId(getAllDepts)
 
+const verifyDelete = async (ctx, next) => {
+  const { id } = ctx.params
+  if(id <= 12305 && id >= 12301) {
+    emitEvent(ctx, '抱歉，预置部门不能删除~')
+    return
+  }
+  await next()
+}
+
 module.exports = {
   verifyDept,
-  verifyDeptId
+  verifyDeptId,
+  verifyDelete
 }

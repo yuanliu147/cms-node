@@ -25,8 +25,11 @@ const verifyMenu = async function (ctx, next) {
   const index = menus.findIndex((item) => {
     return item.name === name || item.path === path
   })
-  if (index >= 0) {
+  if (index >= 0 && httpPath === '/menus') {
     emitEvent(ctx, 'name或path已经存在')
+    return
+  } else if(index < 0 && httpPath !== '/menus'){
+    emitEvent(ctx, 'name或path不存在')
     return
   }
 
@@ -35,7 +38,17 @@ const verifyMenu = async function (ctx, next) {
 
 const verifyMenuId = createToVerifyId(getAllMenus)
 
+const verifyDelete = async (ctx, next) => {
+  const { id } = ctx.params
+  if(id <= 11021 && id >= 11001) {
+    emitEvent(ctx, '抱歉，预置菜单不能删除~')
+    return
+  }
+  await next()
+}
+
 module.exports = {
   verifyMenuId,
-  verifyMenu
+  verifyMenu,
+  verifyDelete
 }

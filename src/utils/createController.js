@@ -22,7 +22,7 @@ const {
   deleteRoleById
 } = require('../service/role.service')
 
-const { emitEvent } = require('./utils')
+const { emitEvent, flatMenuToTree } = require('./utils')
 const { SuccessModel, FailModel } = require('../model/response.model')
 
 const deleteOperators = {
@@ -62,7 +62,7 @@ function createDeleteController(page) {
       if (!deleteOperators[page]) {
         throw new Error('页面不存在~')
       }
-      if(page === 'user' && id === userId) {
+      if (page === 'user' && id === userId) {
         throw new Error('抱歉，不能删除自己！')
         return
       }
@@ -120,8 +120,13 @@ function createGetController(page) {
       const userId = ctx.userId
       const list = await listOperators[page](query, userId)
       const totalRes = await totalOperators[page]()
-      if(page === 'user') {
+      if (page === 'user') {
         totalRes.total--
+      }
+      if (page === 'role') {
+        list.forEach((item) => {
+          item.permission = flatMenuToTree(item.permission)
+        })
       }
       ctx.body = new SuccessModel({ list, ...totalRes })
     } catch (error) {

@@ -26,7 +26,17 @@ async function verifyRole(ctx, next) {
 
 const verifyRoleId = createToVerifyId(getAllRoles)
 
+const verifyDelete = async (ctx, next) => {
+  const { id } = ctx.params
+  if(id <= 1003 && id >= 1001) {
+    emitEvent(ctx, '抱歉，预置角色不能删除~')
+    return
+  }
+  await next()
+}
+
 module.exports = {
   verifyRole,
-  verifyRoleId
+  verifyRoleId,
+  verifyDelete
 }
